@@ -1,0 +1,1221 @@
+#:import ScrollEffect kivy.effects.scroll.ScrollEffect
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+#:import MeshLinePlot kivy.garden.graph.MeshLinePlot
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+ScreenManagement:
+    transition: SlideTransition(direction='left')
+    MenuScreen:
+    ReactorScreen1:
+    ReactorScreen2:
+    ReactorScreen3:
+    ReactorScreen4:
+
+
+
+#####---------       Custom Widgets     ---------#########
+
+<Reactor@BoxButton>:
+	
+	size_hint_x: None
+#	background_color: (0, 1, 1, 1)
+
+<RTabs>
+	text: 'tab'
+
+<TransBox>
+	canvas.before:
+		Color:
+			rgba: 1,1,1,0
+		Rectangle:
+			size: self.size
+			pos: self.pos
+
+
+<RSli>:
+	TransBox:
+		size_hint: (1,1)
+		orientation: 'horizontal'
+		v: 0
+		RangeSlider:
+			id: slid
+			size_hint: (0.9,1)
+			value_track: True
+			value_track_color: get_color_from_hex('FF2366')
+			value_track_width: '1sp'
+			cursor_size: (self.width/17,self.width/17)
+			min: 0
+			max: 100
+			value: 25
+			orientation: 'horizontal'
+			background_width: '8sp'
+		Label:
+			id: slival
+			color: get_color_from_hex('FF2366')
+			size_hint: (0.1,1)
+			markup: True
+			halign: 'center'
+			text: '%s' %int(slid.value)
+			font_size: '12sp'
+		
+
+<ReactorLabel@BoxLayout>:
+	BoxLayout:
+		orientation: 'horizontal'
+		size_hint: (1, 1)
+		border: 30,30,30,30
+		canvas.before:
+			Color:
+				rgba: get_color_from_hex('324A5E')
+			Rectangle:	
+				size: self.size
+				pos: self.pos
+		Image:
+			id: img_temp_status
+			pos_hint: {'center_x': 0.8, 'center_y': .5}
+			size_hint: (0.8, 0.8)
+			source: 'Vectors_img/thermometer.png'
+		Image:
+			id: img_hum_status
+			pos_hint: {'center_x': 0.8, 'center_y': .5}
+			size_hint: (0.8, 0.8)
+			source: 'Vectors_img/thermometer.png'	
+
+
+<CanvasCustom>:
+    value: 60
+    angle: 0
+    strval: ''
+    sen_color: [.5, .3, .1, .8]
+    title: 'SENSOR 1'
+
+    Label:
+        size: self.texture_size
+        text: root.title
+
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: get_color_from_hex('#19252F')
+            Line:
+                width: 0.015*root.width
+                circle: self.center_x,self.center_y-10,self.width/4,0,360
+
+            Color:
+                rgba: root.sen_color
+            Line:
+                width: 0.026*root.width
+                circle: self.center_x,self.center_y-10,self.width/4,0,root.angle
+        Label:
+            size: self.texture_size
+            center: self.center_x,self.center_y
+            text: root.strval
+
+
+#####-----    Internet Status Bar   --------#########
+
+
+<NetLab>:
+    netstatuscolor: [.2, .2, .2, .6]
+    netstattxt: ''
+    Label:
+        text: root.netstattxt
+        canvas.before:
+            Color:
+                rgba: root.netstatuscolor
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+#####-----    Main Reactor Screen  --------#########
+
+<ReactorScreen>
+	humidity_value: 60
+	humidity_angle: 0
+	temp_value: 60
+    temp_angle: 0
+    main_header_color: [0,0,0,1]
+    humidity_strval: ''
+    temp_strval: ''
+    sen_color_temp: [0,0,0,1]
+    sen_color_humidity: [0,0,0,1]
+    title: 'HUMIDITY'
+    ratio: 2
+    ratio_high: 0.015
+    canvas.before:
+		Rectangle:
+			pos: self.pos
+			size: self.size
+			source: 'Vectors_img/DarkBG.png'
+
+	BoxLayout:
+		size_hint: (1,1)
+		orientation: 'vertical'
+		canvas.before:
+			Color:
+				rgba: 1,1,1,0
+			Rectangle:
+				size: self.size
+				pos: self.pos
+		
+
+		BoxLayout:
+			size_hint: (1,0.03)
+			canvas.before:
+				
+				Color:
+					rgba: 0.8,0.8,0.8,0
+				RoundedRectangle:
+					size: self.size
+					pos: self.pos
+			
+			Label:
+				size_hint: (1,1)
+				id:main_label
+				size: self.texture_size
+				text: 'Dashboard'
+				markup: True
+				text_size: self.size
+				font_size: '17sp'
+				halign: 'center'
+				valign: 'top'
+
+	    Reactabs:
+	    	tab_bar_height: self.height/16
+	    	RTabs:
+	    		text: 'Dashboard'			
+	    		FloatLayout:
+					size_hint: (1,1)
+					orientation: 'vertical'
+					id: main_mobile
+					canvas.before:
+						Rectangle:
+							pos: self.pos
+							size: self.size
+							source: 'Vectors_img/DarkBG.png'
+					BoxLayout:
+						orientation: 'horizontal'
+						size_hint: (1, 0.06)
+						pos_hint: {'top':1}
+					#	Button:
+					#		size_hint: (0.2,1)
+					#		text: '‹'
+					#		font_size: '22sp'
+					#		halign: 'center'
+					#		valign: 'top'
+					#		on_press: root.back()
+					#		background_color: 1,1,1,0
+
+							
+						
+
+
+					BoxLayout:
+						size_hint:(1,0.58)
+						orientation: 'vertical'
+						pos_hint: {'top':0.92}
+						do_scroll:True
+						bar_color: (1, 1, 1, 0)
+						orientation: 
+						BoxLayout:
+							id: reactor_main_layout
+							size_hint: (1, 1)
+							orientation: 'vertical'
+							canvas.before:
+								Color:
+									rgba: 1,1,1,0
+								Rectangle:
+									pos: self.pos
+									size: self.size
+							BoxLayout:
+								id:main_temp_cover
+								orientation: 'horizontal'
+								size_hint:(1,0.25)
+								spacing: 2
+								
+								BoxLayout:
+									id:temp_meter
+									orientation: 'vertical'
+									size_hint: (0.5,1)
+									canvas.before:
+
+										Color:
+											rgba: 1,1,1,0
+										Rectangle:
+											pos: self.pos
+											size: self.size
+									Label:
+										opacity: 0.5
+										size_hint: (1,0.07)
+										text: 'TEMPERATURE'
+										valign: 'bottom'
+										color: get_color_from_hex('D8D8D8')
+										font_size: '12sp'
+
+									BoxLayout:
+										size_hint: (1, 0.93)					
+										FloatLayout:
+											size_hint: (1,1)
+											canvas.before:
+												Color: 
+													rgba: 1,1,1,0.05
+												
+												Line:
+													
+													width: root.ratio_high*root.width
+													circle: self.center_x,self.center_y-self.height/2,self.height-0.3*self.height,-90,+90
+
+												Color:
+													rgba: get_color_from_hex('FF2366')
+												Line:
+													width: root.ratio_high*root.width
+													circle: self.center_x,self.center_y-self.height/2,self.height-0.3*self.height,-90,root.temp_angle-90
+													
+											Label:
+												size_hint: (1,0.1)
+												pos_hint: {'top': 0.1}
+												text: root.temp_strval
+												font_size: '13sp'
+												color: get_color_from_hex('FF2366')
+
+								
+								BoxLayout:
+									id:humid_meter
+									orientation: 'vertical'
+									size_hint: (0.5,1)
+									canvas.before:
+										Color:
+											rgba: (1,1,1,0)
+										Rectangle:
+											pos: self.pos
+											size: self.size
+									Label:
+					                	id: humidity_label
+					                	opacity: 0.5
+										size_hint: (1, 0.07)
+										text: 'HUMIDITY'
+										color: get_color_from_hex('D8D8D8')
+										font_size: '12sp'
+									
+									BoxLayout:
+										size_hint: (1, 0.93)					
+										FloatLayout:
+											size_hint: (1,1)
+											canvas.before:
+												Color: 
+													rgba: 1,1,1,0.05
+												
+												Line:
+													
+													width: root.ratio_high*root.width
+													circle: self.center_x,self.center_y-self.height/2,self.height-0.3*self.height,-90,+90
+
+												Color:
+													rgba: get_color_from_hex('FF2366')
+												Line:
+													width: root.ratio_high*root.width
+													circle: self.center_x,self.center_y-self.height/2,self.height-0.3*self.height,-90,root.humidity_angle-90
+													
+											BoxLayout
+												size_hint: (1,0.2)
+												pos_hint: {'top': 0.149,'right': 1}
+
+												Label:
+													size_hint: (1,1)
+													text: root.humidity_strval
+													font_size: '13sp'
+													color: get_color_from_hex('FF2366')
+								
+			                BoxLayout:
+			                	id:main_humidity_cover
+			                	orientation: 'vertical'
+			                	size_hint: (1,0.75)
+			                	canvas.before:
+									Color:
+										rgba: (1,1,1,0)
+									Rectangle:
+										pos: self.pos
+										size: self.size
+			                	BoxLayout:
+			                		orientation: 'horizontal'
+			                		size_hint: (1, 0.2)
+
+			            			BoxLayout:
+			            				size_hint: (0.6,1)
+			            				opacity: 0
+
+
+			                		BoxLayout:
+			                			size_hint: (0.4,1)
+			                			orientation: 'horizontal'
+			                			Label:
+			                				size_hint: (0.5,0.4)
+			                				pos_hint: {'top':0.2}
+				                			text: "· Temp.( ˚C )"
+				                			color: get_color_from_hex('#23C48E')
+				                			valign: 'top'
+				                			font_size: '8.5sp'
+
+                                        Label:
+			                				size_hint: (0.5,0.4)
+			                				pos_hint: {'top':0.2}
+				                			text: " R.H.(%)"
+				                			color: get_color_from_hex('#04C0F8')
+				                			valign: 'top'
+				                			font_size: '8.5sp'
+
+				               
+								BoxLayout:
+									id:temp_graph_cover
+									orientation: 'vertical'
+									size_hint: (1, 0.8)
+									
+									
+									Graph:
+										size_hint: (1,1)
+						                id: graph_temp			                
+						                xlabel:'Hours'
+						                x_ticks_minor:5
+						                label_options: {'color': get_color_from_hex('D8D8D8')}
+						                x_ticks_major:0.5
+						                y_ticks_major:10
+						                y_ticks_minor:10
+						                y_grid_label:True
+						                grid_color: 0.96,0.96,0.96,0.3
+						                x_grid_label:True
+						                y_grid: False
+						                border_color: 1,1,1,0
+						                tick_color: 0.96,0.96,0.96,0.3
+						                #padding:5
+						               # x_grid:True
+						                y_grid:True
+						                xmin: -2
+						                xmax: 0
+						                ymin: root.y_axis_min
+						                font_size: '9sp'
+						                ymax: root.y_axis_max
+				     #            BoxLayout:
+				     #            	id: humidity_graph_cover
+									# orientation: 'vertical'
+									# size_hint: (1, 0.25)
+									# padding: [0.1*main_mobile.width, 0, 0.1*main_mobile.width, 0]
+									# # size:(0,main_mobile.height/2)
+									# canvas.before:
+									# 	Color:
+									# 		rgba: get_color_from_hex('#111929')
+									# 	Rectangle:
+									# 		pos: self.pos
+									# 		size: self.size
+									# Graph:
+						   #              id: graph_humidity
+						   #              xlabel: ""
+						   #              ylabel: "Level"
+						   #              xlabel:'Seconds'
+						   #              ylabel:'Humidity'
+						   #              x_ticks_minor:10
+						   #              x_ticks_major:25
+						   #              y_ticks_major:20
+						   #              y_grid_label:True
+						   #              x_grid_label:True
+						   #              padding:5
+						   #              # x_grid:True
+						   #              # y_grid:True
+						   #              xmin:-25
+						   #              xmax:25
+						   #              ymin:0
+						   #              ymax:100
+
+
+
+			    	BoxLayout:
+			    		size_hint: (1,0.3)
+			    		pos_hint: {'top':0.35}
+			    		orientation: 'vertical'
+			    		spacing: 10
+
+			    		BoxLayout:
+			    			pos_hint: {'top':0.95,'right':0.95}
+			    			size_hint: (0.9,0.32)
+			    			orientation: 'horizontal'
+			    			spacing: 35
+				        	canvas.before:
+					        	Color:
+					        		rgba: 1,1,1,0.07
+					        	RoundedRectangle:
+					        		size: self.size
+					        		pos: self.pos
+
+			        		BoxLayout:
+			        			size_hint: (0.018, 1)
+			        		BoxLayout:
+			        			size_hint: (0.11,1)
+				        		Image:
+				        			id: Not1IndPic
+				        			pos_hint: {'center_x': 0.5,'center_y': 0.5}
+				        			source: 'down3.png'
+
+			    			BoxLayout:
+			    				size_hint: (0.8,1)
+			    				orientation: 'vertical'
+			    				spacing: 4
+
+				    			BoxLayout:
+				    				size_hint: (1,0.5)
+				    				Label:
+				    					id: Not1des
+				    					size: self.texture_size
+				    					halign: 'left'
+				    					valign: 'bottom'
+				    					color: 0.84,0.84,0.84,1
+				    					text: ''
+				    					text_size: self.size
+				    					font_size: '14sp'
+
+								BoxLayout:
+									size_hint: (1,0.5)
+									Label:
+										id: Not1time
+										size: self.texture_size
+				    					halign: 'left'
+				    					valign: 'top'
+				    					color: 0.84,0.84,0.84,0.6
+				    					text: ''
+				    					text_size: self.size
+				    					font_size: '11sp'
+
+							BoxLayout:
+								size_hint: (0.5,1)
+								Label:
+									id: Not1Val
+									size: self.texture_size
+			    					halign: 'right'
+			    					valign: 'center'
+			    					color: get_color_from_hex('05DCAE')
+			    					text: root.rangedict[2]
+			    					text_size: self.size
+			    					font_size: '11sp'
+
+
+							BoxLayout: 
+								size_hint: (0.2,1)
+
+			    		BoxLayout:
+			    			pos_hint: {'top':0.6,'right':0.95}
+			    			size_hint: (0.9,0.32)
+			    			orientation: 'horizontal'
+			    			spacing: 35
+				        	canvas.before:
+					        	Color:
+					        		rgba: 1,1,1,0.07
+					        	RoundedRectangle:
+					        		size: self.size
+					        		pos: self.pos
+
+			        		BoxLayout:
+			        			size_hint: (0.018, 1)
+			        		BoxLayout:
+			        			size_hint: (0.11,1)
+				        		Image:
+				        			id: Not2IndPic
+				        			pos_hint: {'center_x': 0.5,'center_y': 0.5}
+				        			source: 'down3.png'
+
+			    			BoxLayout:
+			    				size_hint: (0.8,1)
+			    				orientation: 'vertical'
+			    				spacing: 4
+
+				    			BoxLayout:
+				    				size_hint: (1,0.5)
+				    				Label:
+				    					id: Not2des
+				    					size: self.texture_size
+				    					halign: 'left'
+				    					valign: 'bottom'
+				    					color: 0.84,0.84,0.84,1
+				    					text: ''
+				    					text_size: self.size
+				    					font_size: '14sp'
+
+								BoxLayout:
+									size_hint: (1,0.5)
+									Label:
+										id: Not2time
+										size: self.texture_size
+				    					halign: 'left'
+				    					valign: 'top'
+				    					color: 0.84,0.84,0.84,0.6
+				    					text: ''
+				    					text_size: self.size
+				    					font_size: '11sp'
+
+							BoxLayout:
+								size_hint: (0.5,1)
+								Label:
+									id: Not2Val
+									size: self.texture_size
+			    					halign: 'right'
+			    					valign: 'center'
+			    					color: get_color_from_hex('05DCAE')
+			    					text: root.rangedict[2]
+			    					text_size: self.size
+			    					font_size: '11sp'
+
+
+							BoxLayout: 
+								size_hint: (0.2,1)
+			    		
+			    		BoxLayout:
+			    			pos_hint: {'top':0.26,'right':0.95}
+			    			size_hint: (0.9,0.32)
+			    			orientation: 'horizontal'
+			    			spacing: 35
+				        	canvas.before:
+					        	Color:
+					        		rgba: 1,1,1,0.07
+					        	RoundedRectangle:
+					        		size: self.size
+					        		pos: self.pos
+
+			        		BoxLayout:
+			        			size_hint: (0.018, 1)
+			        		BoxLayout:
+			        			size_hint: (0.11,1)
+				        		Image:
+				        			id: Not3IndPic
+				        			pos_hint: {'center_x': 0.5,'center_y': 0.5}
+				        			source: 'down3.png'
+
+			    			BoxLayout:
+			    				size_hint: (0.8,1)
+			    				orientation: 'vertical'
+			    				spacing: 4
+
+				    			BoxLayout:
+				    				size_hint: (1,0.5)
+				    				Label:
+				    					id: Not3des
+				    					size: self.texture_size
+				    					halign: 'left'
+				    					valign: 'bottom'
+				    					color: 0.84,0.84,0.84,1
+				    					text: ''
+				    					text_size: self.size
+				    					font_size: '14sp'
+
+								BoxLayout:
+									size_hint: (1,0.5)
+									Label:
+										id: Not3time
+										size: self.texture_size
+				    					halign: 'left'
+				    					valign: 'top'
+				    					color: 0.84,0.84,0.84,0.6
+				    					text: ''
+				    					text_size: self.size
+				    					font_size: '11sp'
+
+							BoxLayout:
+								size_hint: (0.5,1)
+								Label:
+									id: Not3Val
+									size: self.texture_size
+			    					halign: 'right'
+			    					valign: 'center'
+			    					color: get_color_from_hex('05DCAE')
+			    					text: root.rangedict[2]
+			    					text_size: self.size
+			    					font_size: '11sp'
+
+
+							BoxLayout: 
+								size_hint: (0.2,1)
+					        		
+
+					NetLab:
+						size_hint: (1, 0.03)
+						pos_hint: {'top': 0.03,'center_x': 0.5}
+						id: net1
+
+			RTabs:
+				text: 'Settings'
+				TransBox:
+					size_hint: (1,1)
+					orientation: 'vertical'
+					TransBox:
+						size_hint: (1,0.45)
+						orientation: 'vertical'
+						spacing: 10
+						TransBox:
+							size_hint: (1,0.12)
+							orientation: 'horizontal'
+							canvas.before:
+								Color:
+									rgba: get_color_from_hex('FFFFFF')
+								Rectangle:
+									pos: self.pos
+									size: (0.7*self.width,0.003*self.width)
+							TransBox:
+								size_hint: (0.02,1)
+									
+							Label:
+								opacity: 0.8
+								text: 'Alert Range'
+								size_hint: (0.83,1)
+								text_size: self.size
+								markup: True
+								valign: 'center'
+								halign: 'left'
+								color: get_color_from_hex('FFFFFF')
+								font_size: '14sp'
+
+						TransBox:
+							size_hint:(1,0.04)
+							Label:
+								opacity: 0.5
+								text: 'Temperature'
+								size: self.texture_size
+								markup: True
+								valign: 'center'
+								halign: 'left'
+								color: get_color_from_hex('D8D8D8')
+								font_size: '12sp'
+
+
+						TransBox:
+							size_hint: (1,0.4)
+							orientation: 'vertical'
+							spacing: 10
+							TransBox:
+								size_hint: (1,0.5)
+								orientation: 'horizontal'
+								spacing: 7
+								TransBox:
+									size_hint: (0.3,1)
+									Label:
+										opacity: 0.5
+										text: 'Minimum'
+										size: self.texture_size
+										markup: True
+										valign: 'center'
+										halign: 'left'
+										color: get_color_from_hex('D8D8D8')
+										font_size: '12sp'
+
+								TransBox:
+									size_hint: (0.7,1)
+									RSli:
+										id: TempAlMin
+										v: self.ids.slid.value
+										
+
+
+									
+
+							TransBox:
+								size_hint: (1,0.5)
+								orientation: 'horizontal'
+								spacing: 7
+								TransBox:
+									size_hint: (0.3,1)
+									Label:
+										opacity: 0.5
+										text: 'Maximum'
+										size: self.texture_size
+										markup: True
+										valign: 'center'
+										halign: 'left'
+										color: get_color_from_hex('D8D8D8')
+										font_size: '12sp'
+
+								TransBox:
+									size_hint: (0.7,1)
+									RSli:
+										id: TempAlMax
+										cursor_size: (self.width/15,self.width/15)
+										background_width: '8sp'
+										size_hint: (1,1)
+										v: self.ids.slid.value
+										
+
+						TransBox:
+							size_hint:(1,0.1)
+							Label:
+								opacity: 0.5
+								text: 'Humidity'
+								size: self.texture_size
+								markup: True
+								valign: 'center'
+								halign: 'left'
+								color: get_color_from_hex('D8D8D8')
+								font_size: '12sp'
+
+						TransBox:
+							size_hint: (1,0.4)
+							orientation: 'vertical'
+							spacing: 10
+							TransBox:
+								size_hint: (1,0.5)
+								orientation: 'horizontal'
+								spacing: 7
+								TransBox:
+									size_hint: (0.3,1)
+									Label:
+										opacity: 0.5
+										text: 'Minimum'
+										size: self.texture_size
+										markup: True
+										valign: 'center'
+										halign: 'left'
+										color: get_color_from_hex('D8D8D8')
+										font_size: '12sp'
+
+								TransBox:
+									size_hint: (0.7,1)
+									RSli:
+										id: HumAlMin
+										cursor_size: (self.width/15,self.width/15)
+										background_width: '8sp'
+										size_hint: (1,1)
+										v: self.ids.slid.value
+										
+							TransBox:
+								size_hint: (1,0.5)
+								orientation: 'horizontal'
+								spacing: 7
+
+
+								TransBox:
+									size_hint: (0.3,1)
+									Label:
+										opacity: 0.5
+										text: 'Maximum'
+										size: self.texture_size
+										markup: True
+										valign: 'center'
+										halign: 'left'
+										color: get_color_from_hex('D8D8D8')
+										font_size: '12sp'
+
+								TransBox:
+									size_hint: (0.7,1)
+									RSli:
+										id: HumAlMax
+										cursor_size: (self.width/15,self.width/15)
+										background_width: '8sp'
+										size_hint: (1,1)
+										v: self.ids.slid.value
+					
+
+					TransBox:
+						orientation: 'vertical'
+						size_hint: (1,0.35)
+						spacing: 7
+						TransBox:
+							size_hint: (1,0.12)
+							orientation: 'horizontal'
+							canvas.before:
+								Color:
+									rgba: get_color_from_hex('FFFFFF')
+								Rectangle:
+									pos: self.pos
+									size: (0.7*self.width,0.003*self.width)
+							TransBox:
+								size_hint: (0.02,1)
+									
+							Label:
+								opacity: 0.8
+								text: 'Graph Settings'
+								size_hint: (0.83,1)
+								text_size: self.size
+								markup: True
+								valign: 'center'
+								halign: 'left'
+								color: get_color_from_hex('FFFFFF')
+								font_size: '14sp'
+								
+
+						TransBox:
+							size_hint: (1,0.8)
+							spacing: 7
+							orientation: 'vertical'
+
+							TransBox:
+								size_hint: (1,0.33)
+								orientation: 'horizontal'
+								spacing: 7
+								TransBox:
+									size_hint: (0.3,1)
+									Label:
+										opacity: 0.5
+										text: 'Time Duration'
+										size: self.texture_size
+										markup: True
+										valign: 'center'
+										halign: 'left'
+										color: get_color_from_hex('D8D8D8')
+										font_size: '12sp'
+
+								TransBox:
+									size_hint: (0.7,1)
+									RSli:
+										id: TimeDuration
+										cursor_size: (self.width/15,self.width/15)
+										background_width: '8sp'
+										size_hint: (1,1)
+										v: self.ids.slid.value
+
+										
+
+
+							TransBox:
+								size_hint: (1,0.66)
+								orientation: 'vertical'
+								spacing: 7
+
+								Label:
+									size_hint: (1,0.1)
+									opacity: 0.5
+									text: 'Y Axis'
+									size: self.texture_size
+									markup: True
+									valign: 'center'
+									halign: 'left'
+									color: get_color_from_hex('D8D8D8')
+									font_size: '12sp'
+
+								TransBox:
+									size_hint: (1,0.45)
+									orientation: 'horizontal'
+									spacing: 7
+									TransBox:
+										size_hint: (0.3,1)
+										Label:
+											opacity: 0.5
+											text: 'Minimum'
+											size: self.texture_size
+											markup: True
+											valign: 'center'
+											halign: 'left'
+											color: get_color_from_hex('D8D8D8')
+											font_size: '12sp'
+
+									TransBox:
+										size_hint: (0.7,1)
+										RSli:
+											id: YAxisMin
+											cursor_size: (self.width/15,self.width/15)
+											background_width: '8sp'
+											size_hint: (1,1)
+											v: self.ids.slid.value
+											
+
+
+								TransBox:
+									size_hint: (1,0.45)
+									orientation: 'horizontal'
+									spacing: 7
+									TransBox:
+										size_hint: (0.3,1)
+										Label:
+											opacity: 0.5
+											text: 'Maximum'
+											size: self.texture_size
+											markup: True
+											valign: 'center'
+											halign: 'left'
+											color: get_color_from_hex('D8D8D8')
+											font_size: '12sp'
+
+									TransBox:
+										size_hint: (0.7,1)
+										RSli:
+											id: YAxisMax
+											cursor_size: (self.width/15,self.width/15)
+											background_width: '8sp'
+											size_hint: (1,1)
+											v: self.ids.slid.value
+											
+
+					TransBox:
+						size_hint: (1,0.07)
+						orientation: 'horizontal'
+						spacing: 10
+						Label:
+							opacity: 0.5
+							size_hint: (0.3,1)
+							text: 'Contact'
+							text_size: self.size
+							markup: True
+							font_size: '12sp' 
+							halign: 'center'
+							valigh: 'center'
+							color: get_color_from_hex('D8D8D8')
+
+
+						FloatLayout:
+							size_hint: (0.7,0.7)
+							TextInput:
+								id: Contact
+								size_hint: (0.8,0.7)
+								pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+								background_color: (1,1,1,0)
+								canvas.before:
+									Color:
+										rgba: get_color_from_hex('979797')
+									Rectangle:
+										pos: self.pos
+										size: (0.7*self.width,0.005*self.width)
+
+					FloatLayout:
+						size_hint: (1,0.1)
+						orientation: 'vertical'
+						spacing: 15
+						
+						Button:
+							text: 'Save'
+							on_press: root.UpdValues()
+							size_hint: (0.8,0.4)
+							font_size: '14sp'
+							pos_hint: {'center_x': 0.5, 'top': 0.82}
+							background_color: 1,1,1,0
+							canvas.before:
+					        	Color:
+				        			rgba: 1,1,1,0
+					        	RoundedRectangle:
+					        		size: self.size
+					        		pos: self.pos
+					        		source: 'base.png'
+					        		
+
+		        		NetLab:
+							size_hint: (1, 0.3)
+							pos_hint: {'center_x': 0.5, 'top': 0.3}
+							id: net
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		   
+	        
+	    	
+	        
+	    
+	# BoxLayout:
+	# 	cols:1
+	# 	id:main_reactor
+	# 	BoxLayout:
+	# 		orientation: 'horizontal'
+	# 		size_hint_y: None 
+	# 		size: (0,main_reactor.height/10 )
+	# 		canvas:
+	# 			Color:
+	# 				rgba: 0.8,0.8,0.8,1
+	# 			Rectangle:	
+	# 				size: self.size
+	# 				pos: (self.x, self.y)
+	# 		Button:
+	# 			text:'Back'
+	# 			size_hint: (None, 1)
+	# 			size:(main_reactor.width/5,0)
+	# 			on_press: root.back() 
+	# 		Label:
+	# 			id: label
+	# 			text: 'Empty'
+	# 			font_size: '20sp'
+	# 			color: (0, 0, 0, 1)
+
+					
+					
+	# 	BoxLayout:	
+	# 		orientation: 'horizontal'
+	# 		size_hint:1,1
+	# 		canvas:
+	# 			Color:
+	# 				rgba: 0.5,0.5,0.5,1
+	# 			Rectangle:	
+	# 				size: self.size
+	# 		FloatLayout:
+	# 			size_hint:0.5,1
+	# 			Image:
+	# 				source: 'reactor@1.5.png'
+	# 				size_hint_x: 1
+	# 				size_hint_y: 0.5
+	# 				pos_hint: {'left': 0,'top':0.75}
+	# 				allow_stretch: True
+	# 		GridLayout:
+	# 			cols:1
+	# 		    size_hint:(0.5,1)
+	# 		    Label:
+	# 		    	text: 'Temperature1 - '
+	# 		    	color: (0, 0, 0, 1)
+	# 		    	text_size: self.size
+	# 		    	halign: 'left'
+	# 		    	valign: 'middle'
+	# 		    	size_hint_y: None 
+	# 		    	size: (0, 100)
+	# 	    	Label:
+	# 		    	text: 'Temperature2 - '
+	# 		    	color: (0, 0, 0, 1)
+	# 		    	text_size: self.size
+	# 		    	halign: 'left'
+	# 		    	valign: 'middle'
+	# 		    	size_hint_y: None 
+	# 		    	size: (0, 100)
+	# 	    	Label:
+	# 		    	text: 'Humidity - '
+	# 		    	color: (0, 0, 0, 1)
+	# 		    	text_size: self.size
+	# 		    	halign: 'left'
+	# 		    	valign: 'middle'
+	# 		    	size_hint_y: None 
+	# 		    	size: (0, 100)
+	# 	    	Label:
+	# 		    	text: 'Vapour Pressure - '
+	# 		    	color: (0, 0, 0, 1)
+	# 		    	text_size: self.size
+	# 		    	halign: 'left'
+	# 		    	valign: 'middle'
+	# 		    	size_hint_y: None 
+	# 		    	size: (0, 100)
+	# NetLab:
+	# 	size_hint:(1,0.05)
+	# 	id: net
+
+
+#####------     Multiple Reactor Screens -----########
+
+
+
+
+<ReactorScreen1>
+	name: 'reactor1'
+
+<ReactorScreen2>
+	name: 'reactor2'
+
+<ReactorScreen3>
+	name: 'reactor3'
+
+<ReactorScreen4>
+	name: 'reactor4'
+
+
+
+#########-------------    Main Menu Screen  -------------######
+<MenuScreen>	
+	name: 'main'
+	ratio:3
+	FloatLayout:		
+		orientation: 'vertical'
+		size_hint: (1, 1)
+		canvas.before:
+			Rectangle:
+	            pos: self.pos
+	            size: self.size
+	            source: 'Vectors_img/DarkBG.png'
+	            
+
+        
+
+    	BoxLayout:
+    		
+    		size_hint: (1,0.2)
+    		halign: 'center'
+    		pos_hint: {'top': 0.91}
+    		Button:
+    			background_color: 1,1,1,0
+    			size_hint: (1,1)
+    			text: 'Select Location'
+    			font_size: '24sp'
+    			canvas.before:
+    				Color:
+    					rgba: 1,1,1,0
+					Rectangle:
+						size: self.size
+						pos: self.pos
+
+
+		
+		Button:
+			on_press: root.one()
+        	size_hint: (0.6,0.08)
+        	pos_hint: {'right':0.8,'top': 0.6}
+        	background_color: 1,1,1,0
+        	text: 'PRODUCTION'
+        	canvas.before:
+	        	Color:
+        			rgba: 1,1,1,1
+	        	RoundedRectangle:
+	        		size: self.size
+	        		pos: self.pos
+	        		source: 'base.png'
+    
+			
+
+		Button:
+			on_press: root.two()
+        	pos_hint: {'right':0.8,'top': 0.5}
+        	size_hint: (0.6,0.08)
+        	background_color: 1,1,1,0
+        	text: 'PACKAGING'
+        	border: (16,16,16,16)
+        	canvas.before:
+	        	Color:
+        			rgba: 1,1,1,1
+	        	RoundedRectangle:
+	        		size: self.size
+	        		pos: self.pos
+	        		source: 'base.png'
+			
+
+		Button:
+			on_press: root.three()
+        	pos_hint: {'right':0.8,'top': 0.4}
+        	size_hint: (0.6,0.08)
+        	background_color: 1,1,1,0
+        	text: 'STORAGE'
+        	canvas.before:
+	        	Color:
+        			rgba: 1,1,1,1
+	        	RoundedRectangle:
+	        		size: self.size
+	        		pos: self.pos
+	        		source: 'base.png'
+        	
+		Button:
+        	pos_hint: {'right':0.8,'top': 0.3}
+        	size_hint: (0.6,0.08)
+        	background_color: 1,1,1,0
+        	text: 'LOADING'
+        	text_color: (0.84,0.84,0.84,1)
+        	canvas.before:
+	        	Color:
+        			rgba: 1,1,1,1
+	        	RoundedRectangle:
+	        		size: self.size
+	        		pos: self.pos
+	        		source: 'base.png'
+
+		Button:
+        	pos_hint: {'right':0.8,'top': 0.2}
+        	size_hint: (0.6,0.08)
+        	background_color: 1,1,1,0
+        	text: 'POWER UNIT'
+        	canvas.before:
+	        	Color:
+        			rgba: 1,1,1,1
+	        	RoundedRectangle:
+	        		size: self.size
+	        		pos: self.pos
+	        		source: 'base.png'
